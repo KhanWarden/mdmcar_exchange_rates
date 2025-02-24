@@ -1,0 +1,9 @@
+# PyCharm IDE
+__pycache__/
+.idea
+
+# Virtual Environments
+.venv
+venv
+
+.env
