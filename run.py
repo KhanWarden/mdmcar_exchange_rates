@@ -1,5 +1,7 @@
-import asyncio
-from app.scheduler import Scheduler
+from app.scheduler import run_scheduler
 
 if __name__ == "__main__":
-    asyncio.run(Scheduler.run_scheduler())
+    try:
+        run_scheduler()
+    except KeyboardInterrupt:
+        print("Stopped")

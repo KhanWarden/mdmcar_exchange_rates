@@ -1,16 +1,11 @@
-from redis.asyncio import Redis
-import config
+import redis
+from redis.exceptions import DataError
+
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
-redis = Redis.from_url(config.REDIS_URL)
-
-
-async def save_exchange_rate(key: str, value: float) -> None:
-    async with redis.client() as client:
-        await client.set(key, value)
-
-
-async def get_exchange_rate(key: str) -> float:
-    async with redis.client() as client:
-        value = await client.get(key)
-        return float(value) if value else None
+def save_exchange_rate(key: str, value: float) -> None:
+    try:
+        redis_client.set(key, value)
+    except DataError as e:
+        print(e)
