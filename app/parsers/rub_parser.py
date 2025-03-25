@@ -22,4 +22,4 @@ class RubParser(CurrencyParser):
             if valute.get("ID") == cls.USD_RUB_ID:
                 value: float = float(valute.find("Value").text.replace(",", "."))
 
-                return round(value - 0.1, 2)
+                return round(value * 1.045, 2)

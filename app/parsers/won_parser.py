@@ -27,5 +27,5 @@ class WonParser(CurrencyParser):
             raise logging.error(f"Ошибка API: {data.get('error', {}).get('info', 'Неизвестная ошибка')}")
 
         usd_to_krw = data.get("quotes", {}).get("USDKRW", 0)
-        converted_rate = usd_to_krw * 0.99024 - 10  # Rate for sale
+        converted_rate = usd_to_krw * 1.00995  # Добавить 0.995% к курсу, чтобы получить примерно курс как из naver
         return round(converted_rate, 2)
