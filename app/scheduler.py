@@ -24,7 +24,7 @@ def fetch_and_update_exchange_rate():
 
 
 def run_scheduler():
-    hours = 8
+    hours = 1
     while True:
         fetch_and_update_exchange_rate()
         logging.info("Waiting for next fetch")

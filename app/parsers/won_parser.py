@@ -12,5 +12,5 @@ class WonParser(CurrencyParser):
     @classmethod
     def get_exchange_rate(cls, rates: dict) -> float:
         usd_to_krw = float(rates.get("quotes", {}).get("USDKRW", 0))
-        converted_rate = usd_to_krw - 2
+        converted_rate = usd_to_krw + 1
         return round(converted_rate, 2)
