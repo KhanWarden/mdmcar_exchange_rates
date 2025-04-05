@@ -10,7 +10,7 @@ class KZTParser(CurrencyParser):
     HALYK_BANK_URL = "https://back.halykbank.kz/common/currency-history"
 
     @classmethod
-    def get_exchange_rate(cls) -> float:
+    def get_exchange_rate(cls, rates) -> float:
         data = cls.fetch_json(cls.HALYK_BANK_URL)
 
         try:
@@ -21,8 +21,12 @@ class KZTParser(CurrencyParser):
                 usd_kzt_sell = data["data"]["currencyHistory"]["0"]["privatePersons"]["USD/KZT"]["sell"]
                 return usd_kzt_sell
             except (KeyError, TypeError):
-                usd_kzt_sell = data["data"]["currencyHistory"]["1"]["privatePersons"]["USD/KZT"]["sell"]
-                return usd_kzt_sell
+                try:
+                    usd_kzt_sell = data["data"]["currencyHistory"]["1"]["privatePersons"]["USD/KZT"]["sell"]
+                    return usd_kzt_sell
+                except:
+                    logging.error("Ошибка парсинга данных Halyk Bank")
+                    raise
         except:
             logging.error("Ошибка парсинга данных Halyk Bank")
             raise

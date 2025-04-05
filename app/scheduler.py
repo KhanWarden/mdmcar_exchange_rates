@@ -13,7 +13,7 @@ def fetch_and_update_exchange_rate():
     currency_rates = CurrencyParser.get_currency_rates()
     parsers = {
         "usd_to_rub_rate": RubParser.get_exchange_rate(currency_rates),
-        "usd_to_kzt_rate": KZTParser.get_exchange_rate(),
+        "usd_to_kzt_rate": KZTParser.get_exchange_rate(rates=None),
         "usd_to_won_rate": WonParser.get_exchange_rate(currency_rates),
     }
 
