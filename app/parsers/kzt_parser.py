@@ -12,21 +12,20 @@ class KZTParser(CurrencyParser):
     @classmethod
     def get_exchange_rate(cls, rates) -> float:
         data = cls.fetch_json(cls.HALYK_BANK_URL)
+        history = data.get("data", {}).get("currencyHistory", {})
 
-        try:
-            usd_kzt_sell = data["data"]["currencyHistory"][0]["privatePersons"]["USD/KZT"]["sell"]
-            return float(usd_kzt_sell)
-        except (KeyError, TypeError):
+        normalized_history = {
+            str(k): v for k, v in history.items()
+        }
+
+        for key in sorted(normalized_history.keys(), key=int):
             try:
-                usd_kzt_sell = data["data"]["currencyHistory"]["0"]["privatePersons"]["USD/KZT"]["sell"]
-                return usd_kzt_sell
-            except (KeyError, TypeError):
-                try:
-                    usd_kzt_sell = data["data"]["currencyHistory"]["1"]["privatePersons"]["USD/KZT"]["sell"]
-                    return usd_kzt_sell
-                except:
-                    logging.error("Ошибка парсинга данных Halyk Bank")
-                    raise
-        except:
-            logging.error("Ошибка парсинга данных Halyk Bank")
-            raise
+                usd_kzt = normalized_history[key]["privatePersons"]["USD/KZT"]
+                sell_rate = float(usd_kzt["sell"])
+                return sell_rate
+            except (KeyError, TypeError, ValueError):
+                logging.warning(f"[HalykBank] Нет данных по ключу '{key}'")
+                continue
+
+        logging.error("[HalykBank] Не удалось получить курс USD/KZT")
+        raise ValueError("Данные о курсе отсутствуют")
