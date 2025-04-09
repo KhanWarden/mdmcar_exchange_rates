@@ -12,15 +12,18 @@ def fetch_and_update_exchange_rate():
     logging.info("Updating exchange rates")
     currency_rates = CurrencyParser.get_currency_rates()
     parsers = {
-        "usd_to_rub_rate": RubParser.get_exchange_rate(currency_rates),
-        "usd_to_kzt_rate": KZTParser.get_exchange_rate(rates=None),
-        "usd_to_won_rate": WonParser.get_exchange_rate(currency_rates),
+        "usd_to_rub_rate": lambda: RubParser.get_exchange_rate(currency_rates),
+        "usd_to_kzt_rate": lambda: KZTParser.get_exchange_rate(currency_rates),
+        "usd_to_won_rate": lambda: WonParser.get_exchange_rate(currency_rates),
     }
 
-    for redis_key, parser in parsers.items():
-        rate = parser
-        logging.info(f"{redis_key}: {rate}")
-        save_exchange_rate(redis_key, rate)
+    for redis_key, get_rate in parsers.items():
+        try:
+            rate = get_rate()
+            logging.info(f"{redis_key}: {rate}")
+            save_exchange_rate(redis_key, rate)
+        except Exception:
+            logging.error(f"[Error] Не удалось получить курс для {redis_key}")
 
 
 def run_scheduler():
