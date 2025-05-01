@@ -1,7 +1,7 @@
+import asyncio
 import logging
 
 import aiohttp
-import requests
 from bs4 import BeautifulSoup
 
 from .currency_parser import CurrencyParser
@@ -31,7 +31,7 @@ class WonParser(CurrencyParser):
                 price_tag = soup.select_one('strong.price em')
                 if price_tag:
                     currency_rate = float(price_tag.text.strip().replace(",", ""))
+                    print(currency_rate - 10)
                     return currency_rate - 10
                 else:
                     raise Exception("No price tag found")
-

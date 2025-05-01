@@ -19,12 +19,15 @@ async def fetch_and_update_exchange_rate():
     parsers = {
         "usd_to_rub_rate": lambda: RubParser.get_exchange_rate(currency_rates),
         "usd_to_kzt_rate": lambda: KZTParser.get_exchange_rate(currency_rates),
-        "usd_to_won_rate": get_won_rate(),
+        "usd_to_won_rate": get_won_rate,
     }
 
     for redis_key, get_rate in parsers.items():
         try:
-            rate = get_rate() if asyncio.iscoroutinefunction(get_rate) else get_rate()
+            if asyncio.iscoroutinefunction(get_rate):
+                rate = await get_rate()
+            else:
+                rate = get_rate()
             logging.info(f"{redis_key}: {rate}")
             save_exchange_rate(redis_key, rate)
         except Exception:
