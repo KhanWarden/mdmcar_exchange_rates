@@ -4,11 +4,10 @@ import aiohttp
 import requests
 from bs4 import BeautifulSoup
 
-from currency_parser import CurrencyParser
+from .currency_parser import CurrencyParser
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
 
 
 class WonParser(CurrencyParser):
@@ -31,8 +30,8 @@ class WonParser(CurrencyParser):
                 soup = BeautifulSoup(page_content, "html.parser")
                 price_tag = soup.select_one('strong.price em')
                 if price_tag:
-                    currency_rate = price_tag.text.strip().replace(",", "")
-                    return float(currency_rate)
+                    currency_rate = float(price_tag.text.strip().replace(",", ""))
+                    return currency_rate - 10
                 else:
                     raise Exception("No price tag found")
 
