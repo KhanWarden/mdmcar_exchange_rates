@@ -13,5 +13,5 @@ class RubParser(CurrencyParser):
         response = requests.get(api_url)
         json = response.json()
         usd_to_rub = float(json.get("usd").get("buy"))
-        converted_rate = usd_to_rub + 1
+        converted_rate = usd_to_rub + 2
         return round(converted_rate, 2)
