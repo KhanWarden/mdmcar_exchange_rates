@@ -44,4 +44,4 @@ async def run_scheduler():
 
 def get_random_sleep_time() -> int:
     import random
-    return random.randint(3600, 10800)
+    return random.randint(1800, 3600)
