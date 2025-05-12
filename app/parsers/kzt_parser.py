@@ -1,5 +1,4 @@
 import logging
-from types import NoneType
 
 from .currency_parser import CurrencyParser
 

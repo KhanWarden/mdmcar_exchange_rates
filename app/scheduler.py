@@ -11,7 +11,10 @@ logging.basicConfig(level=logging.INFO)
 
 async def fetch_and_update_exchange_rate():
     logging.info("Updating exchange rates")
-    currency_rates = CurrencyParser.get_currency_rates()
+    try:
+        currency_rates = CurrencyParser.get_currency_rates()
+    except Exception as e:
+        logging.error("Failed to get currency rates")
 
     async def get_won_rate():
         return await WonParser.get_exchange_rate()
