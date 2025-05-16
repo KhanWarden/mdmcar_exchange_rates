@@ -31,7 +31,6 @@ class WonParser(CurrencyParser):
                 price_tag = soup.select_one('strong.price em')
                 if price_tag:
                     currency_rate = float(price_tag.text.strip().replace(",", ""))
-                    print(currency_rate - 10)
-                    return currency_rate - 10
+                    return currency_rate - 15
                 else:
                     raise Exception("No price tag found")
